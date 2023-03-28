@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 var velocity = Vector2.ZERO
-
+var fast_fell = false
 func _ready():
 	print("Hello world")
 
@@ -15,11 +15,17 @@ func _physics_process(delta):
 	else:
 		apply_acceleration(input.x)
 	
-		
-		
-	if Input.is_action_just_pressed("ui_up"):
-		velocity.y = -100
-	velocity = move_and_slide(velocity)
+	if is_on_floor(): 
+		fast_fell = false
+		if Input.is_action_just_pressed("ui_up"):
+			velocity.y = -130
+	else:
+		if Input.is_action_just_released("ui_up") and velocity.y < -70:
+			velocity.y = -70
+		if velocity.y > 0 and not fast_fell:
+			velocity.y += 40
+			fast_fell = true
+	velocity = move_and_slide(velocity, Vector2.UP)
 func apply_gravity():
 	velocity.y += 4
 func apply_friction():
