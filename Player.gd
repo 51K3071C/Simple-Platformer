@@ -16,26 +16,36 @@ func _physics_process(delta: float) -> void:
 	var input = Vector2.ZERO
 	input.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	
-	if input.x ==0:
+	if input.x == 0:
 		apply_friction()
+		$AnimatedSprite.animation = "Idle"
 	else:
 		apply_acceleration(input.x)
-		
+		$AnimatedSprite.animation = "Run"
+		if input.x < 0:
+			$AnimatedSprite.flip_h = false
+		if input.x > 0:
+			$AnimatedSprite.flip_h = true
 	# player jump
 	if is_on_floor():
 		if Input.is_action_just_pressed("ui_up"):
 			velocity.y = JUMP_FORCE
+			
 	else:
+		$AnimatedSprite.animation = "Jump"
 		if Input.is_action_just_released("ui_up") and velocity.y < JUMP_RELEASE_FORCE:
 			velocity.y = JUMP_RELEASE_FORCE
 		
 		if velocity.y > 0:
 			velocity.y += ADDITIONAL_FALL_GRAVITY
 
-	
+	var was_in_air = not is_on_floor()
 	# apply movement to the player
 	velocity = move_and_slide(velocity, Vector2.UP)
-
+	var just_landed = is_on_floor() and was_in_air
+	if just_landed:
+		$AnimatedSprite.animation = "Run"
+		$AnimatedSprite.frame = 1
 func apply_gravity():
 	# gravity
 	velocity.y += GRAVITY

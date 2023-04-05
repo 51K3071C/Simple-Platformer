@@ -8,6 +8,22 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "BaseRoom",
+"language": "GDScript",
+"path": "res://levels/BaseRoom.gd"
+}, {
+"base": "Node",
+"class": "RoomEntrance",
+"language": "GDScript",
+"path": "res://levels/rooms/entrances/RoomEntrance.gd"
+} ]
+_global_script_class_icons={
+"BaseRoom": "",
+"RoomEntrance": ""
+}
+
 [application]
 
 config/name="Simple- Platformer"
